@@ -1,8 +1,8 @@
 stages:
   prepare:
-    cmd: python src/prepare.py data/data.xml
+    cmd: python src/prepare.py data/dataset/data.xml
     deps:
-    - data/data.xml
+    - data/dataset/data.xml
     - src/prepare.py
     params:
     - prepare.seed
@@ -20,7 +20,7 @@ stages:
     outs:
     - data/features
   train:
-    cmd: python src/train.py data/features model.pkl
+    cmd: python src/train.py data/features data/models/model.pkl
     deps:
     - data/features
     - src/train.py
@@ -29,22 +29,22 @@ stages:
     - train.n_est
     - train.seed
     outs:
-    - model.pkl
+    - data/models/model.pkl
   evaluate:
-    cmd: python src/evaluate.py model.pkl data/features scores.json prc.json roc.json
+    cmd: python src/evaluate.py data/models/model.pkl data/features data/results/scores.json data/results/prc.json data/results/roc.json
     deps:
     - data/features
-    - model.pkl
+    - data/models/model.pkl
     - src/evaluate.py
     metrics:
-    - scores.json:
+    - data/results/scores.json:
         cache: false
     plots:
-    - prc.json:
+    - data/results/prc.json:
         cache: false
         x: recall
         y: precision
-    - roc.json:
+    - data/results/roc.json:
         cache: false
         x: fpr
         y: tpr
