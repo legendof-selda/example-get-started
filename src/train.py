@@ -13,13 +13,13 @@ if len(sys.argv) != 3:
     sys.stderr.write("\tpython train.py features model\n")
     sys.exit(1)
 
-input = sys.argv[1]
-output = sys.argv[2]
+input_features_dir = sys.argv[1]
+model_output = sys.argv[2]
 seed = params["seed"]
 n_est = params["n_est"]
 min_split = params["min_split"]
 
-with open(os.path.join(input, "train.pkl"), "rb") as fd:
+with open(os.path.join(input_features_dir, "train.pkl"), "rb") as fd:
     matrix = pickle.load(fd)
 
 labels = np.squeeze(matrix[:, 1].toarray())
@@ -35,5 +35,5 @@ clf = RandomForestClassifier(
 
 clf.fit(x, labels)
 
-with open(output, "wb") as fd:
+with open(model_output, "wb") as fd:
     pickle.dump(clf, fd)
